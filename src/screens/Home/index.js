@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import {GIPHY_API_KEY} from 'react-native-dotenv';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +28,9 @@ export default function Home({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to HOME</Text>
+      <Text style={styles.welcome}>
+        Welcome to HOME. Your Key is {GIPHY_API_KEY}
+      </Text>
       <Button title="Navigate Details" onPress={onNavigate} />
     </View>
   );
