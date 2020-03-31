@@ -5,13 +5,16 @@ import {GIPHY_API_KEY} from 'react-native-dotenv';
 
 export default function Gif(props) {
     const [gifs, setGifs] = useState([]);
-    const {navigation} = props;
+    const {route, navigation} = props;
     const numColumn = 2;
+    console.log(route.params);
 
     useEffect(() => {
         async function getGif() {
             try {
-                const response = await fetch('https://api.giphy.com/v1/gifs/trending?api_key=8a16rkgiy4UWDwIMZjmyvphE41dH0e0I&limit=4');
+                const response = await fetch(
+                    `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${route.params.categorie ? route.params.categorie : "cat"}&limit=${route.params.limit}`
+                );
                 const body = await response.json();
                 setGifs(body.data)
             } catch(err) {

@@ -1,6 +1,8 @@
-import React, {useCallback} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {GIPHY_API_KEY} from 'react-native-dotenv';
+import React, {useCallback, useState, useEffect} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {GIPHY_SEARCH_LIMIT} from 'react-native-dotenv';
+import {Button, Input} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,16 +24,30 @@ const styles = StyleSheet.create({
 });
 
 export default function Home({navigation}) {
-  const onNavigate = useCallback(() => navigation.navigate('Details'), [
-    navigation,
-  ]);
+  const [search, setSearch] = useState('');
+
+  const onNavigate = useCallback(
+    () =>
+      navigation.navigate('Gif', {
+        categorie: search,
+        limit: parseInt(GIPHY_SEARCH_LIMIT, 10),
+      }),
+    [navigation, search],
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>
-        Welcome to HOME. Your Key is {GIPHY_API_KEY}
-      </Text>
-      <Button title="Navigate Details" onPress={onNavigate} />
+      <Text style={styles.welcome}>What type of gifs you want ?</Text>
+      <Input
+        placeholder="Enter your input there..."
+        leftIcon={<Icon name="search" size={24} color="black" />}
+        onChangeText={text => setSearch(text)}
+      />
+      <Button
+        style={{marginTop: '50px'}}
+        title="Navigate Details"
+        onPress={onNavigate}
+      />
     </View>
   );
 }

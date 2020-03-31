@@ -5,15 +5,15 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import HomeScreen from './screens/Home';
 import GifScreen from './screens/Gif';
-import GifDetails from './screens/Gif/gif-details';
+import GifDetailScreen from './screens/Gif/gif-details';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Gif" screenOptions={screenOptions}>
+      <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Gif" component={GifScreen} />
-        <Stack.Screen name="GifDetails" component={GifDetails} />
+        <Stack.Screen name="GifDetails" component={GifDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
