@@ -25,7 +25,7 @@ export default function Gif(props) {
         //console.log(value.item.images)
         navigation.navigate('GifDetails', {
             title: value.item.title, 
-            slug: value.item.slug, 
+            username: value.item.username, 
             imported: value.item.import_datetime,
             image: value.item.images.original
         })
