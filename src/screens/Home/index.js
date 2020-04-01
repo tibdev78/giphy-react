@@ -25,7 +25,7 @@ export default function Home({navigation}) {
     () =>
       navigation.navigate('Gif', {
         categorie: search,
-        limit: GIPHY_SEARCH_LIMIT,
+        limit: parseInt(GIPHY_SEARCH_LIMIT, 10),
       }),
     [navigation, search],
   );
