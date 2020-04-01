@@ -3,25 +3,21 @@ import {View, FlatList, Image, TouchableOpacity} from 'react-native';
 import {styles} from './style';
 import {GIPHY_API_KEY} from 'react-native-dotenv';
 
-export default function Gif(props) {
+export default function Gif({navigation, route}) {
+  const {categorie, limit} = route.params;
   const [gifs, setGifs] = useState([]);
-  const {navigation} = props;
   const numColumn = 2;
 
+  const getGif = useCallback(async () => {
+    const uri = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${categorie}&limit=${limit}`;
+    const response = await fetch(uri);
+    const body = await response.json();
+    setGifs(body.data);
+  }, [categorie, limit]);
+
   useEffect(() => {
-    async function getGif() {
-      try {
-        const response = await fetch(
-          `https://api.giphy.com/v1/gifs/trending?api_key=${GIPHY_API_KEY}&limit=4`,
-        );
-        const body = await response.json();
-        setGifs(body.data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    getGif();
-  }, []);
+    getGif().catch(console.error);
+  }, [getGif]);
 
   const _onPress = useCallback(
     value => {
