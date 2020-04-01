@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, Image} from 'react-native';
 import {styles} from './style';
 import Moment from 'react-moment';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function GifDetails({route: {params}}) {
+  const [selected, setSelected] = useState(false);
   return (
     <View style={styles.containerDetails}>
       <View style={styles.boxSizeGiphDetails}>
@@ -24,6 +26,13 @@ export default function GifDetails({route: {params}}) {
           </Moment>
         </Text>
       </View>
+      <Icon
+        style={{textAlign: 'center', marginTop: 75}}
+        name="heart"
+        size={100}
+        color={selected ? 'red' : 'grey'}
+        onPress={() => setSelected(!selected)}
+      />
     </View>
   );
 }
