@@ -4,6 +4,7 @@ import {styles} from './styleDetails';
 import Moment from 'react-moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Button} from 'react-native-elements';
 
 const storeData = async params => {
   await AsyncStorage.setItem(`favorite#${params.id}`, JSON.stringify(params));
@@ -51,6 +52,7 @@ export default function FavoriteDetails({route: {params}}) {
         color={selected ? 'red' : 'grey'}
         onPress={() => setSelected(!selected)}
       />
+      <Button  buttonStyle={{marginTop: 10}} title="Télécharger la photo !" />
     </View>
   );
 }

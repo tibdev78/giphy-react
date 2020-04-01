@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {Image} from 'react-native-elements';
+import {Button, Image} from 'react-native-elements';
 import {styles} from './styleGif';
 import AsyncStorage from '@react-native-community/async-storage';
 
