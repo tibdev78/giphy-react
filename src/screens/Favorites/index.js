@@ -26,7 +26,7 @@ export default function Favorites({navigation, route}) {
 
   const _onPress = useCallback(
     value => {
-      navigation.navigate('GifDetails', {
+      navigation.navigate('favoriteDetails.js', {
         id: value.item.id,
         title: value.item.title,
         username: value.item.username,
@@ -36,7 +36,6 @@ export default function Favorites({navigation, route}) {
     },
     [navigation],
   );
-  console.log(gifs)
   return (
     <View>
       <FlatList
