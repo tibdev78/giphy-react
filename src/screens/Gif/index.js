@@ -28,6 +28,7 @@ export default function Gif({navigation, route}) {
   const _onPress = useCallback(
     value => {
       navigation.navigate('GifDetails', {
+        id: value.item.id,
         title: value.item.title,
         username: value.item.username,
         imported: value.item.import_datetime,

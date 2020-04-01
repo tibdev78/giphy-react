@@ -5,19 +5,25 @@ import Moment from 'react-moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const storeData = async () => {
-  try {
-    const countFavorites = await AsyncStorage.getItem('countFavorites');
-    console.log(countFavorites);
-    await AsyncStorage.setItem('countFavorites', countFavorites + 1);
-    console.log(await AsyncStorage.getItem('countFavorites'));
-  } catch (e) {
-    console.error(e);
-  }
+const storeData = async params => {
+  await AsyncStorage.setItem(`favorite#${params.id}`, JSON.stringify(params));
 };
+
+const removeData = async itemId =>
+  AsyncStorage.removeItem(`favorite#${itemId}`);
 
 export default function GifDetails({route: {params}}) {
   const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    if (selected) {
+      storeData(params).catch(console.error);
+    }
+    if (!selected) {
+      removeData(params.id).catch(console.error);
+    }
+  }, [selected, params]);
+
   return (
     <View style={styles.containerDetails}>
       <View style={styles.boxSizeGiphDetails}>
