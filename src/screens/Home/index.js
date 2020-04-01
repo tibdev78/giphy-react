@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {GIPHY_SEARCH_LIMIT} from 'react-native-dotenv';
 import {Button, Input} from 'react-native-elements';
@@ -16,11 +16,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
 });
 
 export default function Home({navigation}) {
@@ -28,7 +23,7 @@ export default function Home({navigation}) {
 
   const onNavigate = useCallback(
     () =>
-      navigation.navigate('Home', {
+      navigation.navigate('Gif', {
         categorie: search,
         limit: GIPHY_SEARCH_LIMIT,
       }),
@@ -44,8 +39,8 @@ export default function Home({navigation}) {
         onChangeText={text => setSearch(text)}
       />
       <Button
-        style={{marginTop: '50px'}}
-        title="Navigate Details"
+        buttonStyle={{marginTop: 50}}
+        title="Let's see GIFS !"
         onPress={onNavigate}
       />
     </View>
