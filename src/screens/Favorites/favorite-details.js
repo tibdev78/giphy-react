@@ -13,7 +13,7 @@ const removeData = async itemId =>
   AsyncStorage.removeItem(`favorite#${itemId}`);
 
 export default function FavoriteDetails({route: {params}}) {
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(true);
 
   useEffect(() => {
     if (selected) {

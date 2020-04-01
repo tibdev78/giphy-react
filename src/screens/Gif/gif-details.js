@@ -12,8 +12,14 @@ const storeData = async params => {
 const removeData = async itemId =>
   AsyncStorage.removeItem(`favorite#${itemId}`);
 
+const isSelected = async id => AsyncStorage.getItem(`favorite#${id}`);
+
 export default function GifDetails({route: {params}}) {
   const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    isSelected(params.id).then(bool => setSelected(bool));
+  }, [params.id]);
 
   useEffect(() => {
     if (selected) {

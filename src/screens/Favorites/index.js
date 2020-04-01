@@ -6,37 +6,38 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Image} from 'react-native-elements';
-import {styles} from './style';
-import {GIPHY_API_KEY} from 'react-native-dotenv';
+import {styles} from './styleGif';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export default function Favorites({navigation, route}) {
+export default function Favorites({navigation}) {
   const [gifs, setGifs] = useState([]);
   const numColumn = 2;
 
-  const getGif = useCallback(async () => {
-    const uri = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${'test'}&limit=${25}`;
-    const response = await fetch(uri);
-    const body = await response.json();
-    setGifs(body.data);
+  const getGifs = useCallback(async () => {
+    const storage = await AsyncStorage.getAllKeys();
+    const favoritesKey = storage.filter(key => key.startsWith('favorite#'));
+    const data = await AsyncStorage.multiGet(favoritesKey);
+    setGifs(data.map(([key, value]) => JSON.parse(value)));
   }, []);
+  getGifs();
 
   useEffect(() => {
-    getGif().catch(console.error);
-  }, [getGif]);
+    getGifs().catch(console.error);
+  }, [getGifs]);
 
   const _onPress = useCallback(
     value => {
-      navigation.navigate('favoriteDetails.js', {
+      navigation.navigate('FavoritesDetails', {
         id: value.item.id,
         title: value.item.title,
         username: value.item.username,
         imported: value.item.import_datetime,
-        image: value.item.images.original,
+        image: value.item.image,
       });
     },
     [navigation],
   );
-  return (
+  return gifs.length > 0 ? (
     <View>
       <FlatList
         data={gifs}
@@ -47,7 +48,7 @@ export default function Favorites({navigation, route}) {
               <View style={styles.boxSize}>
                 <Image
                   style={styles.image}
-                  source={{uri: value.item.images.original.url}}
+                  source={{uri: value.item.image.url}}
                   resizeMode="stretch"
                   PlaceholderContent={<ActivityIndicator />}
                 />
@@ -58,5 +59,5 @@ export default function Favorites({navigation, route}) {
         keyExtractor={item => item.id}
       />
     </View>
-  );
+  ) : <View/>;
 }
