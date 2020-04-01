@@ -1,24 +1,63 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import {Button, Image} from 'react-native-elements';
+import {styles} from './styleGif';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
+export default function Favorites({navigation}) {
+  const [gifs, setGifs] = useState([]);
+  const numColumn = 2;
 
-export default function Home({navigation}) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>There will be all your favorites !</Text>
-    </View>
+  const getGifs = useCallback(async () => {
+    const storage = await AsyncStorage.getAllKeys();
+    const favoritesKey = storage.filter(key => key.startsWith('favorite#'));
+    const data = await AsyncStorage.multiGet(favoritesKey);
+    setGifs(data.map(([key, value]) => JSON.parse(value)));
+  }, []);
+  getGifs();
+
+  useEffect(() => {
+    getGifs().catch(console.error);
+  }, [getGifs]);
+
+  const _onPress = useCallback(
+    value => {
+      navigation.navigate('FavoritesDetails', {
+        id: value.item.id,
+        title: value.item.title,
+        username: value.item.username,
+        imported: value.item.import_datetime,
+        image: value.item.image,
+      });
+    },
+    [navigation],
   );
+  return gifs.length > 0 ? (
+    <View>
+      <FlatList
+        data={gifs}
+        numColumns={numColumn}
+        renderItem={value => {
+          return (
+            <TouchableOpacity onPress={() => _onPress(value)}>
+              <View style={styles.boxSize}>
+                <Image
+                  style={styles.image}
+                  source={{uri: value.item.image.url}}
+                  resizeMode="stretch"
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={item => item.id}
+      />
+    </View>
+  ) : <View/>;
 }

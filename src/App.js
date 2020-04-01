@@ -8,9 +8,9 @@ import GifScreen from './screens/Gif';
 import GifDetails from './screens/Gif/gif-details';
 import Favorites from './screens/Favorites';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import FavoriteDetails from './screens/Favorites/favorite-details';
 
 const HomeStack = createStackNavigator();
-
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator
@@ -19,6 +19,17 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Gif" component={GifScreen} />
       <HomeStack.Screen name="GifDetails" component={GifDetails} />
     </HomeStack.Navigator>
+  );
+}
+
+const FavoritesStack = createStackNavigator();
+function FavoritesStackScreen() {
+  return (
+    <FavoritesStack.Navigator
+      screenOptions={{...TransitionPresets.SlideFromRightIOS}}>
+      <FavoritesStack.Screen name="Favorites" component={Favorites} />
+      <FavoritesStack.Screen name="FavoritesDetails" component={FavoriteDetails} />
+    </FavoritesStack.Navigator>
   );
 }
 
@@ -49,7 +60,7 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}>
         <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Favorites" component={Favorites} />
+        <Tab.Screen name="Favorites" component={FavoritesStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, Image} from 'react-native';
-import {styles} from './style';
+import {styles} from './styleDetails';
 import Moment from 'react-moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Button} from 'react-native-elements';
 
 const storeData = async params => {
   await AsyncStorage.setItem(`favorite#${params.id}`, JSON.stringify(params));
@@ -12,14 +13,8 @@ const storeData = async params => {
 const removeData = async itemId =>
   AsyncStorage.removeItem(`favorite#${itemId}`);
 
-const isSelected = async id => AsyncStorage.getItem(`favorite#${id}`);
-
-export default function GifDetails({route: {params}}) {
-  const [selected, setSelected] = useState(false);
-
-  useEffect(() => {
-    isSelected(params.id).then(bool => setSelected(bool));
-  }, [params.id]);
+export default function FavoriteDetails({route: {params}}) {
+  const [selected, setSelected] = useState(true);
 
   useEffect(() => {
     if (selected) {
@@ -57,6 +52,7 @@ export default function GifDetails({route: {params}}) {
         color={selected ? 'red' : 'grey'}
         onPress={() => setSelected(!selected)}
       />
+      <Button  buttonStyle={{marginTop: 10}} title="Télécharger la photo !" />
     </View>
   );
 }
