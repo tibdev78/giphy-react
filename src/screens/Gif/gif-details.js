@@ -1,8 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, Image} from 'react-native';
 import {styles} from './style';
 import Moment from 'react-moment';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const storeData = async () => {
+  try {
+    const countFavorites = await AsyncStorage.getItem('countFavorites');
+    console.log(countFavorites);
+    await AsyncStorage.setItem('countFavorites', countFavorites + 1);
+    console.log(await AsyncStorage.getItem('countFavorites'));
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export default function GifDetails({route: {params}}) {
   const [selected, setSelected] = useState(false);
