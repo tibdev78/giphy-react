@@ -1,24 +1,54 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { Image } from 'react-native-elements';
+import { styles } from './style';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});
 
-export default function Home({navigation}) {
+
+export default function Home({navigation, route}) {
+  const [gifsFavorite, setGifsFavorite] = useState([]);
+  const numColumn = 1;
+
+  useEffect(() => {
+    async function getGifs() {
+      try {
+        const stringIds = "";
+        if (route.params) {
+          stringIds = route.params.toString();
+        }
+        const response = await fetch(
+            `https://api.giphy.com/v1/gifs?api_key=8a16rkgiy4UWDwIMZjmyvphE41dH0e0I&ids=SGkufeMafyuBhIw796,W3keANaGsQLC5Ri8DM`
+        );
+        const body = await response.json();
+        setGifsFavorite(body.data)
+      } catch(err) {
+          console.error(err);
+      }
+    }
+    getGifs();
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>There will be all your favorites !</Text>
+    <View>
+       <FlatList 
+          data={gifsFavorite}
+          numColumns={numColumn}
+          renderItem={value => {
+              return (
+                <View style={styles.container}>
+                    <View style={styles.boxSize}>
+                      <Image 
+                      style={styles.image} 
+                      source={{uri: value.item.images.original.url}} 
+                      resizeMode='stretch' 
+                      PlaceholderContent={<ActivityIndicator />}/>
+                    </View>
+                </View>
+              )
+          }}
+          keyExtractor={item => item.id}
+      >
+      </FlatList>
     </View>
   );
 }

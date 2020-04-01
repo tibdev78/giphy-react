@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function GifDetails({route: {params}}) {
   const [selected, setSelected] = useState(false);
+  console.log(selected);
   return (
     <View style={styles.containerDetails}>
       <View style={styles.boxSizeGiphDetails}>
