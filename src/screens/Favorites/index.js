@@ -1,54 +1,63 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
-import { Image } from 'react-native-elements';
-import { styles } from './style';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import {Image} from 'react-native-elements';
+import {styles} from './style';
+import {GIPHY_API_KEY} from 'react-native-dotenv';
 
+export default function Favorites({navigation, route}) {
+  const [gifs, setGifs] = useState([]);
+  const numColumn = 2;
 
-
-export default function Home({navigation, route}) {
-  const [gifsFavorite, setGifsFavorite] = useState([]);
-  const numColumn = 1;
+  const getGif = useCallback(async () => {
+    const uri = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${'test'}&limit=${25}`;
+    const response = await fetch(uri);
+    const body = await response.json();
+    setGifs(body.data);
+  }, []);
 
   useEffect(() => {
-    async function getGifs() {
-      try {
-        const stringIds = "";
-        if (route.params) {
-          stringIds = route.params.toString();
-        }
-        const response = await fetch(
-            `https://api.giphy.com/v1/gifs?api_key=8a16rkgiy4UWDwIMZjmyvphE41dH0e0I&ids=SGkufeMafyuBhIw796,W3keANaGsQLC5Ri8DM`
-        );
-        const body = await response.json();
-        setGifsFavorite(body.data)
-      } catch(err) {
-          console.error(err);
-      }
-    }
-    getGifs();
-  }, [])
+    getGif().catch(console.error);
+  }, [getGif]);
 
+  const _onPress = useCallback(
+    value => {
+      navigation.navigate('GifDetails', {
+        id: value.item.id,
+        title: value.item.title,
+        username: value.item.username,
+        imported: value.item.import_datetime,
+        image: value.item.images.original,
+      });
+    },
+    [navigation],
+  );
+  console.log(gifs)
   return (
     <View>
-       <FlatList 
-          data={gifsFavorite}
-          numColumns={numColumn}
-          renderItem={value => {
-              return (
-                <View style={styles.container}>
-                    <View style={styles.boxSize}>
-                      <Image 
-                      style={styles.image} 
-                      source={{uri: value.item.images.original.url}} 
-                      resizeMode='stretch' 
-                      PlaceholderContent={<ActivityIndicator />}/>
-                    </View>
-                </View>
-              )
-          }}
-          keyExtractor={item => item.id}
-      >
-      </FlatList>
+      <FlatList
+        data={gifs}
+        numColumns={numColumn}
+        renderItem={value => {
+          return (
+            <TouchableOpacity onPress={() => _onPress(value)}>
+              <View style={styles.boxSize}>
+                <Image
+                  style={styles.image}
+                  source={{uri: value.item.images.original.url}}
+                  resizeMode="stretch"
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={item => item.id}
+      />
     </View>
   );
 }
