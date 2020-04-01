@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useCallback } from 'react';
-import {View, Text, Button, FlatList, Image, TouchableOpacity } from 'react-native';
+import {View, Text, Button, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Image } from 'react-native-elements';
 import { styles } from './style';
 import {GIPHY_API_KEY} from 'react-native-dotenv';
 
@@ -7,7 +8,6 @@ export default function Gif(props) {
     const [gifs, setGifs] = useState([]);
     const {route, navigation} = props;
     const numColumn = 2;
-    console.log(route.params);
 
     useEffect(() => {
         async function getGif() {
@@ -25,7 +25,6 @@ export default function Gif(props) {
     }, []);
 
     const _onPress = useCallback((value) => {
-        //console.log(value.item.images)
         navigation.navigate('GifDetails', {
             title: value.item.title, 
             username: value.item.username, 
@@ -42,7 +41,11 @@ export default function Gif(props) {
                    return (
                         <TouchableOpacity onPress={() => _onPress(value)}>
                             <View style={styles.boxSize}>
-                                <Image style={styles.image} source={{uri: value.item.images.original.url}} resizeMode='stretch' />
+                                <Image 
+                                style={styles.image} 
+                                source={{uri: value.item.images.original.url}} 
+                                resizeMode='stretch' 
+                                PlaceholderContent={<ActivityIndicator />}/>
                             </View>
                         </TouchableOpacity>
                    )
